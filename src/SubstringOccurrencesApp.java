@@ -4,10 +4,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class SubstringOccurrences {
-
+public class SubstringOccurrencesApp {
     public static void main(String[] args) {
-        printCheckGetSubstringsCount();
+        printCheckGetSubstringsCount("ен");
 
         Scanner scanner = new Scanner(System.in);
 
@@ -22,7 +21,7 @@ public class SubstringOccurrences {
         System.out.println("Введите подстроку для поиска:");
         String examinedSubstring = scanner.nextLine();
 
-        int substringsCount = getInFileSubstringsCount(inputFilePath, examinedSubstring);
+        int substringsCount = getSubstringsCountInFile(inputFilePath, examinedSubstring);
         System.out.println("Количество подстрок в файле без учета регистра равно " + substringsCount);
     }
 
@@ -36,14 +35,14 @@ public class SubstringOccurrences {
         return file.length() != 0;
     }
 
-    private static int getInFileSubstringsCount(String inputFilePath, String substring) {
-        String line;
-
+    private static int getSubstringsCountInFile(String inputFilePath, String substring) {
         String lowerCaseSubstring = substring.toLowerCase();
 
         int substringsCount = 0;
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFilePath))) {
+            String line;
+
             while ((line = bufferedReader.readLine()) != null) {
                 line = line.toLowerCase();
                 substringsCount += getSubstringsCount(line, lowerCaseSubstring);
@@ -58,14 +57,13 @@ public class SubstringOccurrences {
     private static int getSubstringsCount(String line, String substring) {
         int substringsCount = 0;
         int targetIndex = 0;
-        int i = 0;
 
         while (targetIndex != -1) {
-            targetIndex = line.indexOf(substring, i);
+            targetIndex = line.indexOf(substring, targetIndex);
 
             if (targetIndex != -1) {
                 substringsCount++;
-                i = targetIndex + substring.length();
+                targetIndex += substring.length();
             }
         }
 
@@ -84,14 +82,13 @@ public class SubstringOccurrences {
         };
     }
 
-    private static void printCheckGetSubstringsCount() {
-        String substring = "ен";
-        int countSubstring = 0;
+    private static void printCheckGetSubstringsCount(String substring) {
+        int substringsCount = 0;
 
         for (String s : getDemoStrings()) {
-            countSubstring += getSubstringsCount(s, substring);
+            substringsCount += getSubstringsCount(s, substring);
         }
 
-        System.out.println("Количество подстрок в демо массиве равно " + countSubstring);
+        System.out.println("Количество подстрок в демо массиве равно " + substringsCount);
     }
 }
